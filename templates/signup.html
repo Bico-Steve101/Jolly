@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <script src="{% static 'js/forms.js' %}" defer></script>
+    <title>Register</title>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Register</h2>
+
+        <form id="register-form" method="post" action="{% url 'first:signup' %}">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="error-message">{{ form.non_field_errors.as_text }}</div>
+            {% endif %}
+
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="error-message">{{ form.username.errors.0 }}</div>
+            {% endif %}
+
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="error-message">{{ form.email.errors.0 }}</div>
+            {% endif %}
+
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <div class="error-message">{{ form.password1.errors.0 }}</div>
+            {% endif %}
+
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <div class="error-message">{{ form.password2.errors.0 }}</div>
+            {% endif %}
+
+            <button type="submit">Register</button>
+        </form>
+
+        <p>Already have an account? <a href="{% url 'first:login' %}">Login here</a>/<a href="/">Home</a></p>
+    </div>
+
+</body>
+</html>

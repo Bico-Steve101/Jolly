@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" />
+{#    <title>{% block title %}View Cart{% endblock %}</title>#}
+</head>
+<body>
+
+<div class="payment-confirmation">
+    <h2>Payment Confirmation</h2>
+    <p>Total Amount: ${{ total_amount }}</p>
+
+    <form method="post" action="{% url 'first:confirm_payment' %}">
+        {% csrf_token %}
+        <label for="phone_number">Enter your phone number:</label>
+        <input type="text" name="phone_number" class="payment-input" required>
+        <button type="submit" class="checkout-button">Confirm Payment</button>
+    </form>
+</div>
+</body>
+</html>

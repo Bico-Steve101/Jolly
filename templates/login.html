@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <script src="{% static 'js/forms.js' %}" defer></script>
+    <title>Login</title>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Login</h2>
+
+        <form method="post" action="{% url 'first:login' %}">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="error-message">{{ form.non_field_errors.as_text }}</div>
+            {% endif %}
+
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="error-message">{{ form.username.errors.0 }}</div>
+            {% endif %}
+
+            {{ form.password.label_tag }}
+            {{ form.password }}
+            {% if form.password.errors %}
+                <div class="error-message">{{ form.password.errors.0 }}</div>
+            {% endif %}
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p>Don't have an account? <a href="{% url 'first:signup' %}">Register here</a>/<a href="/">Home</a></p>
+    </div>
+
+</body>
+</html>

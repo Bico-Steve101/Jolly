@@ -1,0 +1,81 @@
+{% load static %}
+
+<!-- templates/viewcart.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" />
+    <title>{% block title %}View Cart{% endblock %}</title>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Your Shopping Cart</h1>
+       <div id="cart-messages-container">
+            {% for message in messages %}
+                <div class="{% if message.tags %}alert alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>     {% if user_cart_items %}
+            <form method="post" action="{% url 'first:remove_from_cart' %}">
+                {% csrf_token %}
+                {% for cart_item in user_cart_items %}
+                    <div class="cart-item">
+                        <h3>{{ cart_item.product.title }}</h3>
+                        <p>Price: ${{ cart_item.product.price }}</p>
+                        <p>Quantity: {{ cart_item.quantity }}</p>
+                        <!-- Add other product details as needed -->
+
+                        <!-- Include a hidden field for the cart item ID -->
+                        <input type="hidden" name="cart_item_id" value="{{ cart_item.id }}">
+
+                        <!-- Add a "Remove from Cart" button -->
+                        <button type="submit" name="remove_from_cart_button" class="cart-item-remove">Remove from Cart</button>
+                    </div>
+                {% endfor %}
+            </form>
+
+            <!-- "Pay" button -->
+            <button onclick="openPayModal()" class="checkout-button">Pay</button>
+{#            <p>Total Amount: ${{ total_amount }}</p>#}
+
+            <!-- Include the Pay modal -->
+            <div id="payModal" class="modal">
+                <div class="modal-content">
+                    <!-- Include the pay.html template here -->
+                    {% include 'pay.html' %}
+                    <button onclick="closePayModal()" class="checkout-button">Close</button>
+                </div>
+            </div>
+        {% else %}
+            <p>Your cart is empty.</p>
+        {% endif %}
+
+        <!-- Include a link to the main shop page -->
+        <a href="{% url 'first:shop' %}" class="continue-shopping-link">Continue Shopping</a>
+    </div>
+
+    <script>
+        function openPayModal() {
+            document.getElementById('payModal').style.display = 'block';
+        }
+
+        function closePayModal() {
+            document.getElementById('payModal').style.display = 'none';
+        }
+        setTimeout(function() {
+            var cartMessagesContainer = document.getElementById('cart-messages-container');
+            if (cartMessagesContainer) {
+                cartMessagesContainer.style.display = 'none';
+            }
+        }, 10000); // 10 seconds
+    </script>
+
+</body>
+</html>
