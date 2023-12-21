@@ -74,10 +74,10 @@
                             <a class="nav-link" href="{% url 'first:contact' %}">Contact</a>
                         </li>
                           {% if user.is_authenticated %}
-                            <li class="nav-item"><a href="{% url 'first:logout' %}">Logout</a></li>
+                            <li class="nav-link"><a href="{% url 'first:logout' %}">Logout</a></li>
                         {% else %}
-                            <li class="nav-item"><a href="{% url 'first:login' %}">Login</a></li>
-                            <li class="nav-item"><a href="{% url 'first:signup' %}">Sign Up</a></li>
+                            <li class="nav-link"><a href="{% url 'first:login' %}">Login</a></li>
+                            <li class="nav-link"><a href="{% url 'first:signup' %}">Sign Up</a></li>
                         {% endif %}
                     </ul>
                 </div>

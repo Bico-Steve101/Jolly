@@ -70,13 +70,13 @@
                             <a class="nav-link" href="{% url 'first:shop' %}">Shop</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'first:shop' %}">Contact</a>
+                            <a class="nav-link" href="{% url 'first:contact' %}">Contact</a>
                         </li>
                           {% if user.is_authenticated %}
-                            <li class="nav-item"><a href="{% url 'first:logout' %}">Logout</a></li>
+                            <li class="nav-link"><a href="{% url 'first:logout' %}">Logout</a></li>
                         {% else %}
-                            <li class="nav-item"><a href="{% url 'first:login' %}">Login</a></li>
-                            <li class="nav-item"><a href="{% url 'first:signup' %}">Sign Up</a></li>
+                            <li class="nav-link"><a href="{% url 'first:login' %}">Login</a></li>
+                            <li class="nav-link"><a href="{% url 'first:signup' %}">Sign Up</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -226,7 +226,7 @@
                                 </div>
                             </div>
                             <div class="card-body underNav">
-                                <a href="{% url 'first:shop-single' %}" class="h3 text-decoration-none">{{ product.title }}</a>
+                                <a href="{% url 'first:shop-single' product.id  %}" class="h3 text-decoration-none">{{ product.title }}</a>
                                 <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
                                     <li>M/L/X/XL</li>
                                     <li class="pt-2">
