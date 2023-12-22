@@ -1,7 +1,9 @@
 /*
 Custom Css
 */
-
+.cartbtn{
+margin-top: 6px;
+}
 .navbar2{
     position: sticky !important;
     top: 0;

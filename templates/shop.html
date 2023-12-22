@@ -217,7 +217,7 @@
                                         <li>
                                              <form class="add-to-cart-form" data-product-id="{{ product.id }}" method="post" action="{% url 'first:add_to_cart' product.id %}">
                                             {% csrf_token %}
-                                              <button class="btn btn-primary text-white" type="submit" name="add_to_cart_button">
+                                              <button class="cartbtn btn btn-primary text-white" type="submit" name="add_to_cart_button">
                                                 <i class="fas fa-cart-plus"></i>
                                                             </button>
                                              </form>
