@@ -1,11 +1,12 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from first.models import SubCategory,Product,FirstCart
+from first.models import SubCategory, Product, FirstCart, Cart
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.urls import reverse_lazy
-from django.contrib.auth import login,logout
+from django.contrib.auth import login, logout
 from django.views.generic.edit import CreateView
 from django.contrib import messages
 
@@ -14,11 +15,19 @@ from django.contrib import messages
 def index(request):
     categories = SubCategory.objects.all()
     products = Product.objects.order_by('-id')[:3]
+
+    cart_size = 0
+    if request.user.is_authenticated:
+        cart_size = FirstCart.get_cart_size(request.user)
+
     context = {
         'categories': categories,
-        'products': products
+        'products': products,
+        'cart_size': cart_size,
     }
-    return render(request, 'index.html',context)
+
+    return render(request, 'index.html', context)
+
 
 def like_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -35,24 +44,30 @@ def like_product(request, product_id):
 
     # Return the number of likes and whether the user has liked the product
     return JsonResponse({'likes': product.likes.count(), 'liked': liked})
+
+
 def about(request):
     return render(request, 'about.html')
+
+
 def shop(request):
     products = Product.objects.all()
     return render(request, 'shop.html', {'products': products})
 
+
 def contact(request):
     return render(request, 'contact.html')
-def shop_single(request):
-    return render(request, 'shop-single.html')
-def shop_singlle(request, product_id):
+
+
+def shop_single(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     related_products = Product.objects.filter(category=product.category).exclude(pk=product_id).order_by('-id')[:3]
     return render(request, 'shop-single.html', {'product': product, 'related_products': related_products})
 
+
+@login_required(login_url='/login')
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-
     # Check if the user has a cart
     user_cart, created = FirstCart.objects.get_or_create(user=request.user, product=product)
 
@@ -64,9 +79,13 @@ def add_to_cart(request, product_id):
     messages.success(request, f'{product.title} added to your cart!')
 
     return JsonResponse({'message': f'{product.title} added to your cart!'})
+
+
+@login_required(login_url='/login')
 def viewcart(request):
     user_cart_items = FirstCart.objects.filter(user=request.user)
     return render(request, 'viewcart.html', {'user_cart_items': user_cart_items})
+
 
 def remove_from_cart(request):
     if request.method == 'POST':
@@ -75,6 +94,7 @@ def remove_from_cart(request):
         cart_item.delete()
         messages.success(request, f'{cart_item.product.title} removed from your cart.')
     return redirect('first:viewcart')
+
 
 def pay(request):
     user_cart_items = FirstCart.objects.filter(user=request.user)
@@ -85,6 +105,7 @@ def pay(request):
     }
 
     return render(request, 'pay.html', context)
+
 
 def confirm_payment(request):
     if request.method == 'POST':
@@ -97,6 +118,7 @@ def confirm_payment(request):
         messages.success(request, 'Payment successful. Your order has been placed.')
         messages.info(request, 'Your cart has been cleared.')
     return redirect('first:viewcart')
+
 
 def user_login(request):
     if request.method == 'POST':

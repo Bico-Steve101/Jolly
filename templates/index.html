@@ -97,7 +97,7 @@
                     </a>
                     <a class="nav-icon position-relative text-decoration-none" href="{% url 'first:viewcart' %}">
                         <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">{{ cart_items_count }}</span>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">{{ cart_size }}</span>
                     </a>
                     <a class="nav-icon position-relative text-decoration-none" href="#">
                         <i class="fa fa-fw fa-user text-dark mr-3"></i>
@@ -229,7 +229,7 @@
         <div class="row">
                     {% for category in categories %}
             <div class="col-12 category col-md-4 p-5 mt-3">
-                <a href="/shop.html"><img src="{{ category.image.url }}" class="rounded-circle img-fluid border"></a>
+                <a href="{% url 'first:shop' %}"><img src="{{ category.image.url }}" class="rounded-circle img-fluid border"></a>
                 <h5 class="text-center mt-3 mb-3">{{ category.name }}</h5>
                 <p class="text-center"><a href="{% url 'first:shop' %}" class="btn btn-success">Go Shop</a></p>
             </div>
@@ -290,56 +290,56 @@
                 </div>
                     {% endfor %}
 
-{#                <div class="col-12 product col-md-4 mb-4">#}
-{#                    <div class="card underNav h-100">#}
-{#                        <a href="{% url 'first:shop-single' %}">#}
-{#                            <img src="{% static 'img/categoryfour.jpg' %}" class="card-img-top" alt="...">#}
-{#                        </a>#}
-{#                        <div class="card-body">#}
-{#                            <ul class="list-unstyled d-flex justify-content-between">#}
-{#                                <li>#}
-{#                                    <i class="text-warning fa fa-star"></i>#}
-{#                                    <i class="text-warning fa fa-star"></i>#}
-{#                                    <i class="text-warning fa fa-star"></i>#}
-{#                                    <i class="text-muted fa fa-star"></i>#}
-{#                                    <i class="text-muted fa fa-star"></i>#}
-{#                                </li>#}
-{#                                <li class="text-muted text-right">$480.00</li>#}
-{#                            </ul>#}
-{#                            <a href="{% url 'first:shop-single' %}" class="h2 text-decoration-none text-dark">Crib</a>#}
-{#                            <p class="card-text">#}
-{#                                A crib is a small child’s bedstead with high enclosing usually slatted sides3.#}
-{#                                It’s the centerpiece of your nursery, and the place for naps and nighttime sleep4.#}
-{#                                The crib you ultimately decide on depends on your wants, your needs, and your budget4.                            </p>#}
-{#                            <p class="text-muted">Reviews (48)</p>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="col-12 product col-md-4 mb-4">#}
-{#                    <div class="card underNav h-100">#}
-{#                        <a href="{% url 'first:shop-single' %}">#}
-{#                            <img src="{% static 'img/categoryone.jpg' %}" class="card-img-top" alt="...">#}
-{#                        </a>#}
-{#                        <div class="card-body">#}
-{#                            <ul class="list-unstyled d-flex justify-content-between">#}
-{#                                <li>#}
-{#                                    <i class="text-warning fa fa-star"></i>#}
-{#                                    <i class="text-warning fa fa-star"></i>#}
-{#                                    <i class="text-warning fa fa-star"></i>#}
-{#                                    <i class="text-warning fa fa-star"></i>#}
-{#                                    <i class="text-warning fa fa-star"></i>#}
-{#                                </li>#}
-{#                                <li class="text-muted text-right">$360.00</li>#}
-{#                            </ul>#}
-{#                            <a href="{% url 'first:shop-single' %}" class="h2 text-decoration-none text-dark">Newborn-size Diapers</a>#}
-{#                            <p class="card-text">#}
-{#                                Newborn-size diapers are suitable for babies that weigh less than 10 pounds, which is#}
-{#                                roughly 4.5 kilograms5. These diapers are designed to keep your baby dry and comfortable.#}
-{#                                The size of the diaper should be chosen based on the baby’s weight rather than their age to ensure a good fit6.                            </p>#}
-{#                            <p class="text-muted">Reviews (74)</p>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
+{% comment %}                <div class="col-12 product col-md-4 mb-4">
+                    <div class="card underNav h-100">
+                        <a href="{% url 'first:shop-single' %}">
+                            <img src="{% static 'img/categoryfour.jpg' %}" class="card-img-top" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                </li>
+                                <li class="text-muted text-right">$480.00</li>
+                            </ul>
+                            <a href="{% url 'first:shop-single' %}" class="h2 text-decoration-none text-dark">Crib</a>
+                            <p class="card-text">
+                                A crib is a small child’s bedstead with high enclosing usually slatted sides3.
+                                It’s the centerpiece of your nursery, and the place for naps and nighttime sleep4.
+                                The crib you ultimately decide on depends on your wants, your needs, and your budget4.                            </p>
+                            <p class="text-muted">Reviews (48)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 product col-md-4 mb-4">
+                    <div class="card underNav h-100">
+                        <a href="{% url 'first:shop-single' %}">
+                            <img src="{% static 'img/categoryone.jpg' %}" class="card-img-top" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                </li>
+                                <li class="text-muted text-right">$360.00</li>
+                            </ul>
+                            <a href="{% url 'first:shop-single' %}" class="h2 text-decoration-none text-dark">Newborn-size Diapers</a>
+                            <p class="card-text">
+                                Newborn-size diapers are suitable for babies that weigh less than 10 pounds, which is
+                                roughly 4.5 kilograms5. These diapers are designed to keep your baby dry and comfortable.
+                                The size of the diaper should be chosen based on the baby’s weight rather than their age to ensure a good fit6.                            </p>
+                            <p class="text-muted">Reviews (74)</p>
+                        </div>
+                    </div>
+                </div>{% endcomment %}
             </div>
         </div>
     </section>

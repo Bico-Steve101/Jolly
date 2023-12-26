@@ -110,8 +110,16 @@ class Cart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
+    @classmethod
+    def get_cart_size(cls, user):
+        return cls.objects.filter(user=user).count()
+
 
 class FirstCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+
+    @classmethod
+    def get_cart_size(cls, user):
+        return cls.objects.filter(user=user).count()

@@ -162,7 +162,7 @@
                                         </div>
                                         <div class="col-4">
                                             <a href="#">
-                                                <img class="card-img img-fluid" src="{{ product.image2.url }} alt="Product Image 2">
+                                                <img class="card-img img-fluid" src="{{ product.image2.url }}" alt="{{ product.title }}">
                                             </a>
                                         </div>
                                         <div class="col-4">
@@ -306,15 +306,15 @@
                                 </div>
                                 <div class="row pb-3">
                                     <div class="col d-grid text-center">
-    <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Buy</button>
-</div>
-<div class="col d-grid text-center">
-   <form class="add-to-cart-form" data-product-id="{{ product.id }}" method="post" action="{% url 'first:add_to_cart' product.id %}">
-                                            {% csrf_token %}
-                                              <button class="btn btn-primary text-white" type="submit" name="add_to_cart_button">
-                                                Add To Cart
-                                                            </button>
-                                             </form>
+                                     <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Buy</button>
+                    </div>
+                <div class="col d-grid text-center">
+                <form class="add-to-cart-form" data-product-id="{{ product.id }}" method="post" action="{% url 'first:add_to_cart' product.id %}">
+                        {% csrf_token %}
+                          <button class="btn btn-primary text-white" type="submit" name="add_to_cart_button">
+                            Add To Cart
+                          </button>
+                 </form>
 {#        <button type="submit" class="btn btn-success btn-lg" name="add_to_cart_button" value="addtocart"></button>#}
 
 </div>
