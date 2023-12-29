@@ -1,7 +1,7 @@
 # yourapp/admin.py
 
 from django.contrib import admin
-from .models import Category, SubCategory, Like, Comment, Product, ProductSize, ProductColor, FirstCart, Cart
+from .models import Category, SubCategory, Like, Comment, Product, ProductSize, ProductColor, FirstCart
 
 
 @admin.register(Category)
@@ -45,4 +45,3 @@ class ProductColorAdmin(admin.ModelAdmin):
 
 
 admin.site.register(FirstCart)
-admin.site.register(Cart)

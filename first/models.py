@@ -65,6 +65,7 @@ class Product(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
     likes = models.ManyToManyField(User, through=Like, related_name='liked_products')
     comments = models.ManyToManyField(User, through=Comment, related_name='commented_products')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     # size = models.CharField(max_length=2, choices=[('S', 'S'), ('M', 'M'), ('L', 'L'), ('XL', 'XL')])
     def __str__(self):
@@ -105,17 +106,19 @@ class ProductColor(models.Model):
         return self.color
 
 
-class Cart(models.Model):
+class FirstCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    overall_total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     @classmethod
     def get_cart_size(cls, user):
         return cls.objects.filter(user=user).count()
 
 
-class FirstCart(models.Model):
+class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)

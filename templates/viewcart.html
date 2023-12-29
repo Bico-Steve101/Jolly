@@ -1,7 +1,5 @@
 {% load static %}
 
-<!-- templates/viewcart.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,34 +14,44 @@
 
     <div class="container">
         <h1>Your Shopping Cart</h1>
-       <div id="cart-messages-container">
+        <div id="cart-messages-container">
             {% for message in messages %}
                 <div class="{% if message.tags %}alert alert-{{ message.tags }}{% endif %}">
                     {{ message }}
                 </div>
             {% endfor %}
-        </div>     {% if user_cart_items %}
-            <form method="post" action="{% url 'first:remove_from_cart' %}">
+        </div>
+        {% if user_cart_items %}
+            <form method="post" action="{% url 'first:viewcart' %}">
                 {% csrf_token %}
                 {% for cart_item in user_cart_items %}
                     <div class="cart-item">
                         <h3>{{ cart_item.product.title }}</h3>
                         <p>Price: ${{ cart_item.product.price }}</p>
-                        <p>Quantity: {{ cart_item.quantity }}</p>
-                        <!-- Add other product details as needed -->
+
+                        <!-- Updated: Quantity input field -->
+                        <label for="quantity_{{ cart_item.id }}">Quantity:</label>
+                        <input type="number" id="quantity_{{ cart_item.id }}" name="quantity_{{ cart_item.id }}" value="{{ cart_item.quantity }}" min="1">
+
+                        <!-- Display total price for the item -->
+                        <p>Total: ${{ cart_item.total_price }}</p>
 
                         <!-- Include a hidden field for the cart item ID -->
                         <input type="hidden" name="cart_item_id" value="{{ cart_item.id }}">
 
                         <!-- Add a "Remove from Cart" button -->
-                        <button type="submit" name="remove_from_cart_button" class="cart-item-remove">Remove from Cart</button>
+                        <button type="button" onclick="confirmRemoveFromCart('{{ cart_item.id }}')" class="cart-item-remove">Remove from Cart</button>
                     </div>
                 {% endfor %}
+
+                <button type="submit" class="update-cart-button">Update Cart</button>
             </form>
+
+            <!-- Display overall total of all products -->
+            <p>Overall Total: ${{ overall_total }}</p>
 
             <!-- "Pay" button -->
             <button onclick="openPayModal()" class="checkout-button">Pay</button>
-{#            <p>Total Amount: ${{ total_amount }}</p>#}
 
             <!-- Include the Pay modal -->
             <div id="payModal" class="modal">
@@ -62,13 +70,28 @@
     </div>
 
     <script>
+        // Initially hide the payment modal
+        document.getElementById('payModal').style.display = 'none';
+
         function openPayModal() {
+            // Show the payment modal when the button is clicked
             document.getElementById('payModal').style.display = 'block';
         }
 
         function closePayModal() {
+            // Hide the payment modal when the close button is clicked
             document.getElementById('payModal').style.display = 'none';
         }
+
+        function confirmRemoveFromCart(cartItemId) {
+            var confirmDelete = confirm("Are you sure you want to remove this item from your cart?");
+            if (confirmDelete) {
+                // If confirmed, find the form and submit it
+                var form = document.getElementById('removeFromCartForm_' + cartItemId);
+                form.submit();
+            }
+        }
+
         setTimeout(function() {
             var cartMessagesContainer = document.getElementById('cart-messages-container');
             if (cartMessagesContainer) {

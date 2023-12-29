@@ -13,7 +13,11 @@
 
 <div class="payment-confirmation">
     <h2>Payment Confirmation</h2>
-    <p>Total Amount: ${{ total_amount }}</p>
+    <p>Total Amount: ${{ overall_total }}</p>
+
+    <p>Selected Size: {{ request.session.selected_size }}</p>
+    <p>Selected Quantity: {{ request.session.selected_quantity }}</p>
+
 
     <form method="post" action="{% url 'first:confirm_payment' %}">
         {% csrf_token %}

@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from first.models import SubCategory, Product, FirstCart, Cart
@@ -68,6 +70,7 @@ def shop_single(request, product_id):
 @login_required(login_url='/login')
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
+
     # Check if the user has a cart
     user_cart, created = FirstCart.objects.get_or_create(user=request.user, product=product)
 
@@ -84,29 +87,71 @@ def add_to_cart(request, product_id):
 @login_required(login_url='/login')
 def viewcart(request):
     user_cart_items = FirstCart.objects.filter(user=request.user)
-    return render(request, 'viewcart.html', {'user_cart_items': user_cart_items})
+    overall_total = calculate_overall_total(user_cart_items)
 
-
-def remove_from_cart(request):
     if request.method == 'POST':
-        cart_item_id = request.POST.get('cart_item_id')
+        for cart_item in user_cart_items:
+            quantity = request.POST.get(f'quantity_{cart_item.id}')
+
+            try:
+                # Ensure quantity is a Decimal object
+                quantity = Decimal(str(quantity))
+
+                # Update individual item and calculate total price
+                cart_item.quantity = quantity
+                cart_item.total_price = cart_item.product.price * quantity
+                cart_item.save()
+
+            except FirstCart.DoesNotExist:
+                pass  # Handle the case where the cart item does not exist (optional)
+
+        # Update overall total based on individual item totals
+        overall_total = calculate_overall_total(user_cart_items)
+        FirstCart.objects.filter(user=request.user).update(overall_total=overall_total)
+
+        messages.success(request, "Cart updated successfully.")
+
+    return render(request, 'viewcart.html', {'user_cart_items': user_cart_items, 'overall_total': overall_total})
+
+
+@login_required(login_url='/login')
+def remove_from_cart(request, cart_item_id):
+    if request.method == 'POST':
         cart_item = get_object_or_404(FirstCart, id=cart_item_id, user=request.user)
+        product_title = cart_item.product.title
+
+        # Delete the cart item from the database
         cart_item.delete()
-        messages.success(request, f'{cart_item.product.title} removed from your cart.')
+
+        messages.success(request, f'{product_title} removed from your cart.')
+
+        # Recalculate overall total after removing the item
+        user_cart_items = FirstCart.objects.filter(user=request.user)
+        overall_total = calculate_overall_total(user_cart_items)
+        FirstCart.objects.filter(user=request.user).update(overall_total=overall_total)
+
     return redirect('first:viewcart')
 
 
+def calculate_overall_total(user_cart_items):
+    return sum(cart_item.total_price for cart_item in user_cart_items)
+
+
+@login_required(login_url='/login')
 def pay(request):
     user_cart_items = FirstCart.objects.filter(user=request.user)
-    total_amount = sum(cart_item.product.price * cart_item.quantity for cart_item in user_cart_items)
+
+    # Calculate overall total using the same function as in viewcart
+    overall_total = calculate_overall_total(user_cart_items)
 
     context = {
-        'total_amount': total_amount,
+        'overall_total': overall_total,
     }
 
     return render(request, 'pay.html', context)
 
 
+@login_required(login_url='/login')
 def confirm_payment(request):
     if request.method == 'POST':
         # Perform payment processing logic here

@@ -1,0 +1,13 @@
+<!-- You can customize this template according to your needs -->
+{% block content %}
+    <h1>Buy Now</h1>
+    <p>Product: {{ product.title }}</p>
+    <form method="post" action="{% url 'first:pay' %}">
+        {% csrf_token %}
+        <input type="hidden" name="product-size" value="{{ size }}">
+        <input type="hidden" name="product-quantity" value="{{ quantity }}">
+        <button class="btn btn-success btn-lg" type="submit" name="submit" value="buy">
+            Proceed to Pay
+        </button>
+    </form>
+{% endblock %}
